@@ -1,41 +1,49 @@
 package ru.stanovihin.cocos.controllers;
 
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import ru.stanovihin.cocos.models.Role;
-import ru.stanovihin.cocos.models.entities.CocosUser;
-import ru.stanovihin.cocos.models.rest.LoginRequest;
-import ru.stanovihin.cocos.services.AuthenticationService;
-import ru.stanovihin.cocos.services.CocosUserService;
+import ru.stanovihin.cocos.models.rest.JwtRequest;
+import ru.stanovihin.cocos.models.rest.JwtResponse;
+import ru.stanovihin.cocos.models.rest.RefreshJwtRequest;
+import ru.stanovihin.cocos.services.AuthService;
 
+import javax.security.auth.message.AuthException;
+
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final CocosUserService cocosUserService;
-    private final AuthenticationService authenticationService;
-    private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
-
-    public AuthController(CocosUserService cocosUserService, AuthenticationService authenticationService,
-                          PasswordEncoder passwordEncoder) {
-        this.cocosUserService = cocosUserService;
-        this.authenticationService = authenticationService;
-        this.passwordEncoder = passwordEncoder;
+    @PostMapping("/register")
+    public ResponseEntity<JwtResponse> register(@RequestBody JwtRequest authRequest) throws AuthException {
+        System.out.println("Received /login request: " + authRequest);
+        final JwtResponse token = authService.login(authRequest);
+        return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        System.out.println("Received /signin loginRequest: " + loginRequest);
-        return ResponseEntity.ok(authenticationService.authenticate(loginRequest));
+    @PostMapping("/login")
+    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest authRequest) throws AuthException {
+        System.out.println("Received /login request: " + authRequest);
+        final JwtResponse token = authService.login(authRequest);
+        return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> userRegistration(@Valid @RequestBody LoginRequest loginRequest) {
-        System.out.println("Received /signup loginRequest: " + loginRequest);
-        return ResponseEntity.ok(authenticationService.register(loginRequest));
+    @PostMapping("/token")
+    public ResponseEntity<JwtResponse> getNewAccessToken(@RequestBody RefreshJwtRequest request) throws AuthException {
+        System.out.println("Received /token request: " + request);
+        final JwtResponse token = authService.getAccessToken(request.getRefreshToken());
+        return ResponseEntity.ok(token);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtResponse> getNewRefreshToken(@RequestBody RefreshJwtRequest request) throws AuthException {
+        System.out.println("Received /refresh request: " + request);
+        final JwtResponse token = authService.refresh(request.getRefreshToken());
+        return ResponseEntity.ok(token);
+    }
+
 }

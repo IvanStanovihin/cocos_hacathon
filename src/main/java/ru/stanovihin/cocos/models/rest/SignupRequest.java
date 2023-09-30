@@ -2,9 +2,10 @@ package ru.stanovihin.cocos.models.rest;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 
+@ToString
 @Data
 @Builder
 public class SignupRequest {
