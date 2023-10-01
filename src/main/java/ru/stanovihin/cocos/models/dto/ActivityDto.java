@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import ru.stanovihin.cocos.models.entities.CocosUser;
 
 @Data
 @AllArgsConstructor
@@ -12,9 +13,11 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 public class ActivityDto {
-    
+
+    private Long activityId;
     //"run" | "swim" | "bicycle" | "fitness"
     private String type;
+    private String createDate;
     
     //км/ч
     private Integer distance;
@@ -28,4 +31,6 @@ public class ActivityDto {
     private Integer duration;
     // км/ч
     private Integer averageSpeed;
+    private Integer coinsReceived;
+    private CocosUser user;
 }

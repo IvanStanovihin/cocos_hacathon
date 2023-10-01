@@ -24,7 +24,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
-        final CocosUser user = userService.getByLogin(authRequest.getLogin())
+        final CocosUser user = userService.findByLogin(authRequest.getLogin())
                 .orElseThrow(() -> new AuthException("Пользователь не найден"));
         if (user.getPassword().equals(authRequest.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
@@ -42,7 +42,7 @@ public class AuthService {
             final String login = claims.getSubject();
             final String saveRefreshToken = refreshStorage.get(login);
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final CocosUser user = userService.getByLogin(login)
+                final CocosUser user = userService.findByLogin(login)
                         .orElseThrow(() -> new AuthException("Пользователь не найден"));
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 return new JwtResponse(accessToken, null);
@@ -57,7 +57,7 @@ public class AuthService {
             final String login = claims.getSubject();
             final String saveRefreshToken = refreshStorage.get(login);
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final CocosUser user = userService.getByLogin(login)
+                final CocosUser user = userService.findByLogin(login)
                         .orElseThrow(() -> new AuthException("Пользователь не найден"));
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 final String newRefreshToken = jwtProvider.generateRefreshToken(user);

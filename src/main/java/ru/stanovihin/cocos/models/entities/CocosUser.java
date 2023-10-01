@@ -30,6 +30,9 @@ public class CocosUser{
     private String password;
     private String firstName;
     private String lastName;
-    private Set<Role> roles;
+    private String department;
+    private Integer coins;
+    @Enumerated(EnumType.STRING)
+    private Role roles;
 
 }

@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import ru.stanovihin.cocos.models.Role;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 @Getter
@@ -16,10 +17,10 @@ public class JwtAuthentication implements Authentication {
     private boolean authenticated;
     private String username;
     private String firstName;
-    private Set<Role> roles;
+    private Role roles;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() { return roles; }
+    public Collection<? extends GrantedAuthority> getAuthorities() { return Collections.singletonList(roles); }
 
     @Override
     public Object getCredentials() { return null; }

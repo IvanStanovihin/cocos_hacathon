@@ -9,6 +9,7 @@ import ru.stanovihin.cocos.authorization.JwtFilter;
 import ru.stanovihin.cocos.authorization.JwtProvider;
 import ru.stanovihin.cocos.authorization.JwtUtils;
 import ru.stanovihin.cocos.models.Role;
+import ru.stanovihin.cocos.models.entities.Activity;
 import ru.stanovihin.cocos.models.entities.CocosUser;
 import ru.stanovihin.cocos.repositories.CocosUserRepository;
 
@@ -21,7 +22,6 @@ import java.util.Optional;
 @Service
 public class CocosUserService{
 
-    private List<CocosUser> users;
     private final JwtProvider jwtProvider;
     private final JwtFilter jwtFilter;
     private final CocosUserRepository cocosUserRepository;
@@ -33,26 +33,24 @@ public class CocosUserService{
         this.cocosUserRepository = cocosUserRepository;
     }
 
-
-    @PostConstruct
-    void init(){
-        this.users = List.of(
-                new CocosUser(1L, "admin", "admin", "Антон", "Иванов", Collections.singleton(Role.USER)),
-                new CocosUser(2L, "user", "user", "Сергей", "Петров", Collections.singleton(Role.ADMIN))
-        );
+    public Optional<CocosUser> findByLogin(String login){
+        return cocosUserRepository.findByLogin(login);
     }
 
-    public Optional<CocosUser> getByLogin(@NonNull String login) {
-        return users.stream()
-                .filter(user -> login.equals(user.getLogin()))
-                .findFirst();
-    }
-
-    public CocosUser findByToken(String jwtToken){
-        final Claims claims = jwtProvider.getAccessClaims(jwtToken);
-        String userLogin = JwtUtils.getLogin(claims);
+    public CocosUser findByRequest(HttpServletRequest request){
+//        final Claims claims = jwtProvider.getAccessClaims(jwtToken);
+//        String userLogin = JwtUtils.getLogin(claims);
+        String userLogin = jwtFilter.getLogin(request);
         CocosUser user = cocosUserRepository.findByLogin(userLogin).get();
         System.out.println("User found by token: " + user);
         return user;
+    }
+
+    public List<CocosUser> findSortedByCoins(){
+        return cocosUserRepository.findSortedByCoins();
+    }
+
+    public CocosUser save(CocosUser cocosUser){
+        return cocosUserRepository.save(cocosUser);
     }
 }

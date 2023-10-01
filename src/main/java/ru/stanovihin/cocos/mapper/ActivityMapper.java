@@ -12,14 +12,19 @@ public class ActivityMapper {
 
     public ActivityDto toDto(Activity activity){
         return new ActivityDto()
+                .setActivityId(activity.getId())
                 .setType(activity.getType())
                 .setIntensity(activity.getIntensity())
                 .setDate(activity.getDate())
+                .setDistance(activity.getDistance())
                 .setSteps(activity.getSteps())
                 .setCalories(activity.getCalories())
                 .setImage(activity.getImage())
                 .setDuration(activity.getDuration())
-                .setAverageSpeed(activity.getAverageSpeed());
+                .setAverageSpeed(activity.getAverageSpeed())
+                .setUser(activity.getCocosUser())
+                .setCreateDate(activity.getCreateDate())
+                .setCoinsReceived(activity.getCoinsReceived());
     }
 
     public Activity toEntity(ActivityDto activityDto){
@@ -28,10 +33,12 @@ public class ActivityMapper {
                 .setIntensity(activityDto.getIntensity())
                 .setDate(activityDto.getDate())
                 .setSteps(activityDto.getSteps())
+                .setDistance(activityDto.getDistance())
                 .setCalories(activityDto.getCalories())
                 .setImage(activityDto.getImage())
                 .setDuration(activityDto.getDuration())
-                .setAverageSpeed(activityDto.getAverageSpeed());
+                .setAverageSpeed(activityDto.getAverageSpeed())
+                .setCoinsReceived(activityDto.getCoinsReceived());
     }
 
     public List<ActivityDto> toListEntities(List<Activity> activities){

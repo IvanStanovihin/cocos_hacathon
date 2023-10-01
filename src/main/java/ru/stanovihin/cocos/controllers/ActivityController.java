@@ -3,15 +3,15 @@ package ru.stanovihin.cocos.controllers;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.stanovihin.cocos.mapper.ActivityMapper;
 import ru.stanovihin.cocos.models.dto.ActivityDto;
 import ru.stanovihin.cocos.models.entities.Activity;
 import ru.stanovihin.cocos.services.ActivityService;
 
+import javax.servlet.http.HttpServletRequest;
+
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/activity")
 public class ActivityController {
@@ -26,9 +26,10 @@ public class ActivityController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> saveActivity(@RequestBody ActivityDto activityDto){
-
-        activityService.save(activityDto);
+    public ResponseEntity<?> saveActivity(HttpServletRequest request,
+            @RequestBody ActivityDto activityDto){
+        System.out.println("Received POST /activity");
+        activityService.save(request, activityDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
-    @Query(value = "SELECT * FROM activity ORDER BY activity.date DESC LIMIT ?1",
+    @Query(value = "SELECT * FROM activity ORDER BY activity.create_date DESC LIMIT ?1",
     nativeQuery = true)
     List<Activity> findLast(int i);
 }

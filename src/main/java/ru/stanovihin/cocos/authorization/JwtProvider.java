@@ -34,14 +34,14 @@ public class JwtProvider {
 
     public String generateAccessToken(@NonNull CocosUser user) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant = now.plusMinutes(50).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
         return Jwts.builder()
                 .setSubject(user.getLogin())
                 .setExpiration(accessExpiration)
                 .signWith(jwtAccessSecret)
                 .claim("roles", user.getRoles())
-                .claim("firstName", user.getFirstName())
+                .claim("login", user.getLogin())
                 .compact();
     }
 

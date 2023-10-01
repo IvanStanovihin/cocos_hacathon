@@ -15,4 +15,14 @@ public enum Role implements GrantedAuthority {
     public String getAuthority() {
         return vale;
     }
+
+    public static Role build(String value){
+        switch (value){
+            case "ADMIN":
+                return Role.ADMIN;
+            case "USER":
+                return Role.USER;
+        }
+        return null;
+    }
 }

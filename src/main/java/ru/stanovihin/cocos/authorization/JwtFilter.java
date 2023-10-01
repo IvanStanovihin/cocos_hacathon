@@ -37,6 +37,14 @@ public class JwtFilter extends GenericFilterBean {
         fc.doFilter(request, response);
     }
 
+    public String getLogin(HttpServletRequest request){
+        String token = getTokenFromRequest(request);
+        final Claims claims = jwtProvider.getAccessClaims(token);
+        String userLogin = claims.get("login", String.class);
+        System.out.println("User login from jwtToken: " + userLogin);
+        return userLogin;
+    }
+
     public String getTokenFromRequest(HttpServletRequest request) {
         final String bearer = request.getHeader(AUTHORIZATION);
         if (StringUtils.hasText(bearer) && bearer.startsWith("Bearer ")) {
@@ -44,5 +52,8 @@ public class JwtFilter extends GenericFilterBean {
         }
         return null;
     }
+
+
+
 
 }

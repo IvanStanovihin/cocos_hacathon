@@ -1,7 +1,5 @@
 package ru.stanovihin.cocos.models.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -21,9 +19,14 @@ public class Activity {
     private Integer distance;
     private Integer intensity;
     private String date;
+    private String createDate;
     private Integer steps;
     private Integer calories;
     private String image;
     private Integer duration;
+    private Integer coinsReceived;
     private Integer averageSpeed;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cocos_user_id")
+    private CocosUser cocosUser;
 }

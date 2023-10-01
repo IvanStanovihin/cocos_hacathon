@@ -14,23 +14,21 @@ public final class JwtUtils {
 
     public static JwtAuthentication generate(Claims claims) {
         final JwtAuthentication jwtInfoToken = new JwtAuthentication();
-        jwtInfoToken.setRoles(getRoles(claims));
+        jwtInfoToken.setRoles(Role.build(getRoles(claims)));
         jwtInfoToken.setFirstName(claims.get("firstName", String.class));
         jwtInfoToken.setUsername(claims.getSubject());
         return jwtInfoToken;
     }
 
-    private static Set<Role> getRoles(Claims claims) {
-        final List<String> roles = claims.get("roles", List.class);
-        return roles.stream()
-                .map(Role::valueOf)
-                .collect(Collectors.toSet());
+    private static String getRoles(Claims claims) {
+        final String roles = claims.get("roles", String.class);
+        return roles;
     }
 
-    public static String getLogin(Claims claims){
-        String userLogin = claims.get("login", String.class);
-        System.out.println("User login from jwtToken: " + userLogin);
-        return userLogin;
-    }
+//    public static String getLogin(Claims claims){
+//        String userLogin = claims.get("login", String.class);
+//        System.out.println("User login from jwtToken: " + userLogin);
+//        return userLogin;
+//    }
 
 }
